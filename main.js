@@ -568,11 +568,18 @@ Object.keys(bots).forEach(function(botid) {
         /* Check for limitations */
         /* [TODO: Disable bot if trade is impossible] */
         bots[botid].bot.on('accountLimitations', function (limited, communityBanned, locked, canInviteFriends) {
-            if (limited) { logger.warn('[' + bots[botid].name + '] Account limited!'); }
-            if (communityBanned){ logger.warn('[' + bots[botid].name + '] Account banned from Steam Community!'); }
-            if (locked){ logger.error('[' + bots[botid].name + '] Account locked! Can\'t trade!'); }
-            if (!canInviteFriends){ logger.warn('[' + bots[botid].name + '] Account can not add any friends!'); }
-        });
+            bots[botid].bot.logOff(botid);
+        }
+            if (communityBanned){ logger.warn('[' + bots[botid].name + '] Account banned from Steam Community!'); 
+            bots[botid].bot.logOff(botid);
+        }
+            if (locked){ logger.error('[' + bots[botid].name + '] Account locked! Can\'t trade!'); 
+            bots[botid].bot.logOff(botid);
+        }
+            if (!canInviteFriends){ logger.warn('[' + bots[botid].name + '] Account can not add any friends!'); 
+            bots[botid].bot.logOff(botid);
+        }                       
+         });
 
         bots[botid].bot.on('friendMessage', function(senderID, message) {
             processMessage(botid, senderID, message);
